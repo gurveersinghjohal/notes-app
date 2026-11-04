@@ -1,14 +1,25 @@
-<script>
-// Leave "" when the page and API are on the same server.
-// For Amplify we'll set this to the API's HTTPS address in the next step.
-const API = "";
-async function load(){
-  const r = await fetch(API + "/api/notes"); const n = await r.json();
-  list.innerHTML = n.map(x => `<li>${x.text}</li>`).join("");
-}
-async function add(){
-  await fetch(API + "/api/notes",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text:t.value})});
-  t.value=""; load();
-}
-load();
-</script>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Notes</title>
+</head>
+<body>
+  <h1>Notes</h1>
+  <input id="t"><button onclick="add()">Add</button>
+  <ul id="list"></ul>
+  <script>
+    // Leave "" while the page and API are on the same server.
+    const API = "";
+    async function load(){
+      const r = await fetch(API + "/api/notes"); const n = await r.json();
+      list.innerHTML = n.map(x => `<li>${x.text}</li>`).join("");
+    }
+    async function add(){
+      await fetch(API + "/api/notes",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text:t.value})});
+      t.value=""; load();
+    }
+    load();
+  </script>
+</body>
+</html>
