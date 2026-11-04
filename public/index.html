@@ -10,8 +10,7 @@
   <ul id="list"></ul>
   <script>
     // Leave "" while the page and API are on the same server.
-    const API = "";
-    async function load(){
+const API = "https://d15ykn5fwcjy1i.cloudfront.net";    async function load(){
       const r = await fetch(API + "/api/notes"); const n = await r.json();
       list.innerHTML = n.map(x => `<li>${x.text}</li>`).join("");
     }
