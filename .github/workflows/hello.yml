@@ -1,0 +1,13 @@
+name: Hello
+
+on: push
+
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Say hello
+        run: echo "hello"
+
+      - name: Print commit message/
+        run: echo "Commit message: ${{ github.event.head_commit.message }}"
