@@ -1,18 +1,12 @@
 name: Hello
 
-on: push
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-  hello:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Say hello
-        run: echo "hello"
-
-      - name: Print commit message
-        run: |
-          echo "Commit message: ${{ github.event.head_commit.message }}"
-
   check:
     runs-on: ubuntu-latest
     steps:
@@ -29,3 +23,15 @@ jobs:
 
       - name: Check server.js syntax
         run: node --check server.js
+
+  hello:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Say hello
+        run: echo "hello"
+
+      - name: Print what triggered this
+        run: |
+          echo "Event: ${{ github.event_name }}"
+          echo "Branch: ${{ github.ref_name }}"
