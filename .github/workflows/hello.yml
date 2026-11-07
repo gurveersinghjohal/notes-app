@@ -1,18 +1,12 @@
 name: Hello
 
-on: push
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-  hello:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Say hello
-        run: echo "hello"
-
-      - name: Print commit message
-        run: |
-          echo "Commit message: ${{ github.event.head_commit.message }}"
-
   check:
     runs-on: ubuntu-latest
     steps:
@@ -29,3 +23,35 @@ jobs:
 
       - name: Check server.js syntax
         run: node --check server.js
+
+  hello:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Say hello
+        run: echo "hello"
+
+      - name: Print what triggered this
+        env:
+          EVENT: ${{ github.event_name }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          echo "Event: $EVENT"
+          echo "Branch: $BRANCH"
+
+  secrets-demo:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use a secret safely
+        env:
+          MY_SECRET: ${{ secrets.DEMO_SECRET }}
+        run: |
+          echo "Secret length: ${#MY_SECRET}"
+          echo "Trying to print it: $MY_SECRET"
+
+      - name: Safe way to use text people type
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          echo "Running on branch: $BRANCH"
